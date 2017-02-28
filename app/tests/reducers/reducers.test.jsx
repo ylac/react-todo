@@ -59,4 +59,22 @@ describe('Reducers', () => {
     });
   });
 
+  it('should add existing todos', () => {
+    var todos = [{
+      id: '854s',
+      text: 'Eat lunch',
+      completed: false,
+      createdAt: 653757653,
+      completedAt: undefined
+    }];
+    var action = {
+      type: 'ADD_TODOS',
+      todos
+    };
+    var res = reducers.todosReducer(df([]), df(action));
+
+    expect(res.length).toEqual(1);
+    expect(res[0]).toEqual(todos[0]);
+
+  });
 });
