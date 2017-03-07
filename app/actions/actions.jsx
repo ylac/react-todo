@@ -31,7 +31,7 @@ export var startAddTodo = (text) => {
     };
     var todoRef = firebaseRef.child('todos').push(todo);
 
-    // Once firebase updated successfuly with todo and return todoRef...
+    // Once firebase updated successfully with todo and return todoRef...
     return todoRef.then(() => {
       dispatch(addTodo({
         ...todo,
@@ -45,6 +45,26 @@ export var addTodos = (todos) => {
   return {
     type: 'ADD_TODOS',
     todos
+  };
+};
+
+export var startAddTodos = () => {
+  return (dispatch, getState) => {
+    var todosRef = firebaseRef.child('todos');
+
+    return todosRef.once('value').then((snapshot) => {
+      var todos = snapshot.val() || {};
+      var parsedTodos = [];
+
+      Object.keys(todos).forEach((todoId) => {
+        parsedTodos.push({
+          id: todoId,
+          ...todos[todoId]
+        });
+      });
+
+      dispatch(addTodos(parsedTodos));
+    });
   };
 };
 
