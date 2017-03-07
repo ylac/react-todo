@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var path = require('path');
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 module.exports = {
   entry: [
     'script!jquery/dist/jquery.min.js',
@@ -14,6 +16,11 @@ module.exports = {
     new webpack.ProvidePlugin({
       '$': 'jquery',
       'jQuery': 'jquery'
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
+      }
     })
   ],
   output: {
@@ -28,9 +35,9 @@ module.exports = {
       './app/api'
     ],
     alias: {
+      actions: 'app/actions/actions.jsx',
       app: 'app',
       applicationStyles: 'app/styles/app.scss',
-      actions: 'app/actions/actions.jsx',
       reducers: 'app/reducers/reducers.jsx',
       configureStore: 'app/store/configureStore.jsx'
     },
@@ -53,5 +60,5 @@ module.exports = {
       path.resolve(__dirname, './node_modules/foundation-sites/scss')
     ]
   },
-  devtool: 'inline-source-map'
+  devtool: process.env.NODE_ENV === 'production' ? undefined : 'inline-source-map'
 };
