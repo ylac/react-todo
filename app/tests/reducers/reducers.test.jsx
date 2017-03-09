@@ -1,6 +1,7 @@
 var expect = require('expect');
 var df = require('deep-freeze-strict');
 var reducers = require('reducers');
+import configureMockStore from 'redux-mock-store';
 
 describe('Reducers', () => {
   describe('searchTextReducer', () => {
@@ -86,5 +87,27 @@ describe('Reducers', () => {
     expect(res.length).toEqual(1);
     expect(res[0]).toEqual(todos[0]);
 
+  });
+
+  describe('authReducer', () => {
+    it('should store the uid on the state', () => {
+      const action = {
+        type: 'LOGIN',
+        uid: '235wer34'
+      }
+      var res = reducers.authReducer(undefined, df(action));
+
+      expect(res.uid).toEqual(action.uid);
+    });
+
+    it('should clear the uid in store on logout', () => {
+      const action = {type: 'LOGOUT'};
+      const store = {
+        uid: '2t3t2trewtg'
+      };
+
+      var res = reducers.authReducer(store, df(action));
+      expect(res).toEqual({});
+    });
   });
 });

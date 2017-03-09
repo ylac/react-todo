@@ -49,7 +49,6 @@ describe('TodoList', () => {
     var searchText = '';
     var todoList = TestUtils.renderIntoDocument(<TodoList todos={todos} showCompleted={showCompleted} searchText={searchText}/>);
     var $el = $(ReactDOM.findDOMNode(todoList));
-    console.log($el);
     expect($el.find('.container__message').length).toBe(1);
   });
 
