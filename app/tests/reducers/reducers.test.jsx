@@ -1,7 +1,12 @@
 var expect = require('expect');
+import thunk from 'redux-thunk';
 var df = require('deep-freeze-strict');
 var reducers = require('reducers');
+var actions = require('actions');
 import configureMockStore from 'redux-mock-store';
+import firebase, {firebaseRef} from 'app/firebase';
+
+var createMockStore = configureMockStore([thunk]);
 
 describe('Reducers', () => {
   describe('searchTextReducer', () => {
@@ -86,8 +91,24 @@ describe('Reducers', () => {
 
     expect(res.length).toEqual(1);
     expect(res[0]).toEqual(todos[0]);
-
   });
+
+  it('should wipe todos on logout', () => {
+    var todos = [{
+      id: '854s',
+      text: 'Eat lunch',
+      completed: false,
+      createdAt: 653757653,
+      completedAt: undefined
+    }];
+    var action = {
+      type: 'LOGOUT'
+    };
+    var res = reducers.todosReducer(df([todos]), df(action));
+
+    expect(res).toEqual([]);
+  });
+
 
   describe('authReducer', () => {
     it('should store the uid on the state', () => {
